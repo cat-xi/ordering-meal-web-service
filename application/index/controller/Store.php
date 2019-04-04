@@ -47,13 +47,29 @@ class Store
     /**
      * 显示店家自己数据页面，判断登陆 session
      */
+    /**
+     * @return \think\response\Json name=>名称 tel=>电话 password=>密码 location=>位置 location=>位置 cuisine=>菜系 examine=>审核 online=>上线 portrait=>头像 orderCount=>订单数 state=>状态
+     */
     public function oneself(){
         Config::set("default_return_type","json");
         $tel = Session::get('hotel');
         if ($tel==null){
-            return '没有登陆';
+            return json(array("description"=>"error", "detail"=>"not login"),400);
         }else{
-            return model("Hotel","logic")->findHotelByTel($tel);
+            $data = model("Hotel","logic")->findHotelByTel($tel);
+            $newData = array(
+                'name'=>$data->name,
+                'tel'=>$data->tel,
+                'password'=>$data->password,
+                'location'=>$data->location,
+                'cuisine'=>$data->cuisine,
+                'examine'=>$data->examine,
+                'online'=>$data->online,
+                'portrait'=>$data->portrait,
+                'orderCount'=>'133',
+                'state'=>'上线',
+            );
+            return  json(array("description"=>"OK","data"=>$newData),200);
         }
     }
 

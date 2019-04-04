@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+    <meta charset="UTF-8">
+    <title>店家</title>
+    <script src="/frontEnd/lib/vue.js"></script>
+    <script src="/frontEnd/lib/vue-resource.js"></script>
+    <script src="/frontEnd/lib/elm.js"></script>
+    <script src="/frontEnd/el-hotel/index.js"></script>
+    <link rel="stylesheet" href="/frontEnd/lib/elm.css">
+    <link rel="stylesheet" href="/frontEnd/lib/elm2.css">
+    <style>
+        .el-header{
+            background-color: #409EFF;
+            color: #333;
+            text-align: center;
+        }
+        .el-aside {
+            background-color: #409EFF;
+            color: #333;
+            text-align: center;
+        }
+        .el-main {
+            background-color: #EBF5FF;
+            color: #333;
+            text-align: center;
+        }
+        .el-menu{
+            border: 0;
+        }
+        #con{
+            height: 100%;
+        }
+    </style>
+</head>
+<body style="height: 100%">
+<div id="app" style="height: 100%">
+    <el-container id="con">
+        <el-header height="30px">
+            <span>店家界面</span>
+        </el-header>
+        <el-container>
+            <el-aside width="150px" height="100%-30px">
+                <el-menu
+                        default-active="1"
+                        class="el-menu-vertical-demo"
+                        background-color="#409EFF"
+                        text-color="#fff"
+                        active-text-color="#ffd04b"
+                        @select="showPage">
+                    <el-menu-item index="1">
+                        <i class="el-icon-menu"></i>
+                        <span slot="title">首页</span>
+                    </el-menu-item>
+                    <el-menu-item index="2">
+                        <i class="el-icon-document"></i>
+                        <span slot="title">菜单</span>
+                    </el-menu-item>
+                    <el-menu-item index="3">
+                        <i class="el-icon-document"></i>
+                        <span slot="title">订单</span>
+                    </el-menu-item>
+                    <el-menu-item index="4">
+                        <i class="el-icon-setting"></i>
+                        <span slot="title">设置</span>
+                    </el-menu-item>
+                </el-menu>
+            </el-aside>
+            <el-main height="95%">
+                <home-page v-if="view==1" v-bind:home="home"></home-page>
+                <menu-page v-if="view==2"></menu-page>
+                <order-page v-if="view==3"></order-page>
+                <set-page v-if="view==4"></set-page>
+            </el-main>
+        </el-container>
+    </el-container>
+</div>
+</body>
+</html>
