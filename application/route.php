@@ -22,6 +22,7 @@
 use think\Route;
 // 注册路由到index模块的News控制器的read操作
 Route::rule('show/:id','index/Store/show');
+Route::rule('dish/:id','index/Store/dish');
 //\think\Route::any('/hotel','index/Index/index');
 //\think\Route::any('/hotel/login','index/Index/login');
 //\think\Route::any('/hotel/show:id','index/Index/show');
