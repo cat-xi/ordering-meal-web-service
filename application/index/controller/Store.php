@@ -70,16 +70,16 @@ class Store
      * 登陆 添加session
      */
     public function login(){
-//        return "登陆成功";
+        Config::set("default_return_type","json");
         $tel = input('tel');
         $int = model("Hotel","logic")->login(new Hotel(null,$tel,input('password'),null,null,null,null,null));
         if ($int==1){
             Session::set("hotel","$tel");
-            echo "登陆成功";
+            return json(array("description"=>"OK"),200);
         }else if ($int==-1){
-            echo "内容为null";
+            return json(array("description"=>"error", "detail"=>"not null"),400);
         }else{
-            echo "密码错误";
+            return json(array("description"=>"error", "detail"=>"password error"),400);
         }
     }
 

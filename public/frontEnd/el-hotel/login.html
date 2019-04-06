@@ -1,18 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height: 100%">
 <head>
     <meta charset="UTF-8">
-    <title>登陆</title>
+    <title>店家登陆</title>
+    <script src="/frontEnd/lib/vue.js"></script>
+    <script src="/frontEnd/lib/vue-resource.js"></script>
+    <script src="/frontEnd/lib/elm.js"></script>
+    <link rel="stylesheet" href="/frontEnd/lib/elm.css">
+    <link rel="stylesheet" href="/frontEnd/lib/elm2.css">
+    <!-- 引入组件库 -->
+    <style>
+        .el-col{
+            background-color: white;
+            padding: 10px 20px 10px 20px;
+        }
+    </style>
 </head>
-<body>
-<form method="post" action="/index.php/index/Store/login">
-    <input type="text" name="tel">
-    <input type="password" name="password">
-    <input type="submit">
-</form>
-<form action="/index.php/index/Store/offline">
-    退出登陆
-    <input type="submit">
-</form>
+<body style="height: 100%">
+<div id="app" style="height: 100%;background-color: #EBF5FF;">
+    <el-row style="padding-top: 150px;padding-bottom: 30px">
+        <el-col :span="12" :offset="6">
+            <span>店家登陆界面</span>
+        </el-col>
+    </el-row>
+    <el-row>
+        <el-col :span="12" :offset="6">
+            <el-input v-model="tel" placeholder="请输入帐号">
+                <template slot="prepend">帐号</template>
+            </el-input>
+        </el-col>
+        <el-col :span="12" :offset="6">
+            <el-input v-model="password" type="password" placeholder="请输入密码">
+                <template slot="prepend">密码</template>
+            </el-input>
+        </el-col>
+        <el-col :span="12" :offset="6">
+            <el-button v-on:click="login" style="width:100%" type="primary">登录</el-button>
+        </el-col>
+        <el-col :span="12" :offset="6">
+            <el-button style="width:100%" type="primary">注册</el-button>
+        </el-col>
+    </el-row>
+</div>
 </body>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            tel:'',
+            password:''
+        },
+        methods:{
+            login:function(){
+                this.$http.post('/index.php/index/Store/login',{tel:this.tel,password:this.password},{emulateJSON:true}).then(function(res){
+                    console.log(res.body);
+                    if (res.body.description==="OK"){
+                        window.location.href="index.html";
+                    }
+                },function(res){
+                    alert('密码错误');
+                });
+            }
+        }
+    });
+</script>
 </html>
