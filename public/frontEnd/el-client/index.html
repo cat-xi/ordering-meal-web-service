@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+    <meta charset="UTF-8">
+    <title>饿了吗?</title>
+    <script src="/frontEnd/lib/vue.js"></script>
+    <script src="/frontEnd/lib/vue-resource.js"></script>
+    <script src="/frontEnd/lib/elm.js"></script>
+    <link rel="stylesheet" href="/frontEnd/lib/elm.css">
+    <link rel="stylesheet" href="/frontEnd/lib/elm2.css">
+    <style>
+        .mp{
+            padding: 30px;
+        }
+    </style>
+</head>
+<body style="height: 100%">
+<div id="app" style="background-color: #398DDA;height: 100%">
+    <el-row class="mp">
+        <el-col :span="1"><div>&nbsp;</div></el-col>
+        <el-col :span="22">
+            <el-row height="50px">
+                <el-col :span="3" :offset="20">
+                    <div>
+                        <template v-if="login" style="height:50%">
+                            <el-button v-on:click="offline">退出</el-button>
+                        </template>
+                        <template v-else style="height:50%">
+                            <a style="color: white" href="registered.html">注册</a>
+                            <span style="color: white"> | </span>
+                            <a style="color: white" href="login.html">登陆</a>
+                        </template>
+                        <span>&nbsp;</span>
+                    </div>
+                </el-col>
+                <el-col :span="1">
+                    <el-button type="success" style="height:50%">我要开店</el-button>
+                </el-col>
+            </el-row>
+            <el-row>
+                <div style="width: 100%;padding:200px 0px;margin-bottom: 50px">
+                    <el-col :span="12" :offset="6">
+                        <el-button v-on:click="meal" style="width:100%">订餐</el-button>
+                    </el-col>
+                    <el-col :span="6"><div>&nbsp;</div></el-col>
+                </div>
+            </el-row>
+        </el-col>
+        <el-col :span="1"><div>&nbsp;</div></el-col>
+    </el-row>
+</div>
+</body>
+<script>
+    window.onload=function () {
+        var app = new Vue({
+            el: '#app',
+            data:{
+                login:false
+            },
+            methods:{
+                //验证是否登陆
+                meal:function () {
+                    if (this.login===false){
+                        window.location.href="login.html";
+                    }else{
+                        alert('已经登陆');
+                    }
+                },
+                offline:function () {
+                    Vue.http.get("/index.php/index/Client/offline").then(res => {
+                        app.login=false;
+                    },response => {
+                        // self.location='http://localhost:8888/frontEnd/el-admin/login.html';
+                        // window.location.href="login.html";
+                    })
+                }
+            }
+        });
+        Vue.http.get("/index.php/index/Client/isLogin").then(res => {
+            app.login=true;
+        },response => {
+            // self.location='http://localhost:8888/frontEnd/el-admin/login.html';
+            // window.location.href="login.html";
+        })
+    }
+</script>
+</html>

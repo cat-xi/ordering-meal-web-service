@@ -30,4 +30,30 @@ class LogicPerson extends Model
         }
         return 1;
     }
+
+    /**
+     * 添加用户
+     * @param Person $person 用户对象
+     * @return int 返回1添加成功 返回-1内容为null 返回0添加失败
+     */
+    public function addClient(Person $person){
+        if ($person->password==null||$person->tel==null)
+            return -1;
+        $person->admin=false;
+        return \model('ModelPerson','model')->insertPerson($person);
+    }
+
+    /**
+     * 登陆
+     * @param Person $person
+     * @return int 成功返回1 密码错误返回0 内容为null返回-1
+     */
+    public function login(Person $person){
+        if ($person->tel==null||$person->password==null)
+            return -1;
+        $per = \model('ModelPerson','model')->selectPersonByTel($person->tel);
+        if ($per->password==$person->password)
+            return 1;
+        return 0;
+    }
 }

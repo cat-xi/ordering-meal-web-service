@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+    <meta charset="UTF-8">
+    <title>用户注册</title>
+    <script src="/frontEnd/lib/vue.js"></script>
+    <script src="/frontEnd/lib/vue-resource.js"></script>
+    <script src="/frontEnd/lib/elm.js"></script>
+    <link rel="stylesheet" href="/frontEnd/lib/elm.css">
+    <link rel="stylesheet" href="/frontEnd/lib/elm2.css">
+    <style>
+        .el-col{
+            background-color: white;
+            padding: 10px 20px 10px 20px;
+        }
+    </style>
+</head>
+<body style="height: 100%">
+    <div id="app" style="height: 100%;background-color: #EBF5FF;">
+        <el-row style="padding-top: 150px;padding-bottom: 30px">
+            <el-col :span="12" :offset="6">
+                <span>用户注册</span>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="12" :offset="6">
+                <el-input v-model="tel" placeholder="请输入帐号">
+                    <template slot="prepend">电话</template>
+                </el-input>
+            </el-col>
+            <el-col :span="12" :offset="6">
+                <el-input v-model="pass1" type="password" placeholder="请输入密码">
+                    <template slot="prepend">密码</template>
+                </el-input>
+            </el-col>
+            <el-col :span="12" :offset="6">
+                <el-input v-model="pass2" type="password" placeholder="确认密码">
+                    <template slot="prepend">密码</template>
+                </el-input>
+            </el-col>
+            <el-col :span="12" :offset="6">
+                <el-button id="login" v-on:click="register" style="width:100%" type="primary">注册</el-button>
+            </el-col>
+        </el-row>
+    </div>
+</body>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data:{
+            tel:'',
+            pass1:'',
+            pass2:''
+        },
+        methods:{
+            register:function () {
+                if (this.pass1!==this.pass2){
+                    alert('密码不一致');
+                    return;
+                }
+                this.$http.post('/index.php/index/Client/register',{tel:this.tel,password:this.pass1}).then(function(res){
+                    console.log(res.body);
+                    if (res.body.description==="OK"){
+                        window.location.href="login.html";
+                    }
+                },function(res){
+                    alert('密码错误');
+                });
+            },
+        }
+    });
+</script>
+</html>

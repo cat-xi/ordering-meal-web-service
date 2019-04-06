@@ -20,9 +20,15 @@ class ModelPerson extends Model
     /**
      * 添加用户
      * @param Person $person
+     * @return false|int
      */
     public function insertPerson(Person $person){
-
+        $this->data([
+            'tel'=>$person->tel,
+            'password'=>$person->password,
+            'admin'=>$person->admin
+        ]);
+        return $this->save();
     }
 
     /**

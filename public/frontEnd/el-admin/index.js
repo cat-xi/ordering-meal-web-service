@@ -2,14 +2,6 @@
  * 判断登陆 否则进入登陆界面
  * 执行首页数据方法
  */
-// Vue.http.get("/index.php/index/Admin/homePage").then(res => {
-//     console.log(res.body.data );
-//     console.log("hello")
-//     return { data: res.body.data }
-// },response => {
-//     console.log("asd");
-//     self.location='http://localhost:8888/frontEnd/el-admin/login.html';
-// })
 window.onload=function () {
     Vue.component('home-page', {
         props: {
