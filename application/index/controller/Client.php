@@ -70,4 +70,9 @@ class Client
         Session::delete("client");
         return json(array("description"=>"OK"),200);
     }
+    public function findHotels(){
+        Config::set("default_return_type","json");
+        $hotels = model("Hotel","logic")->findOnlineHotels();
+        return json(array("description"=>"OK","data"=>$hotels),200);
+    }
 }

@@ -129,4 +129,20 @@ class Hotel extends Model
     public function onlineHotel($tel){
         return \model('HotelUser','model')->updateHotel(new \app\common\pojo\Hotel(null,$tel,null,null,null,null,true,null));
     }
+
+    /**
+     * 返回已经上线店家
+     * @return array
+     */
+    public function findOnlineHotels(){
+        $newHotels = [];
+        $hotels = \model('HotelUser','model')->selectAllHotels();
+        foreach ($hotels as $hotel){
+            if ($hotel->online==true){
+                $hotel->portrait=$this->showUrl.$hotel->tel;
+                array_push($newHotels,$hotel);
+            }
+        }
+        return $newHotels;
+    }
 }
