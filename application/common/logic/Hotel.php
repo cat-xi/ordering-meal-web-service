@@ -91,9 +91,42 @@ class Hotel extends Model
 
     /**
      * 审核店家
-     * @param $tel string 电话tel
+     * @param $tel
+     * @return mixed
      */
     public function auditHotel($tel){
         return \model('HotelUser','model')->updateHotel(new \app\common\pojo\Hotel(null,$tel,null,null,null,true,null,null));
+    }
+
+    /**
+     * 带上线店家数据
+     * @return array json 包含name,tel,location,cuisine,portrait,menu(array)
+     */
+    public function findNotOnline(){
+        $newHotels = [];
+        $hotels = \model('HotelUser','model')->selectAllHotels();
+        foreach ($hotels as $hotel){
+            if ($hotel->examine==true&&$hotel->online==false){
+                $hotel->portrait=$this->showUrl.$hotel->tel;
+                array_push($newHotels,array(
+                    'name'=>$hotel->name,
+                    'tel'=>$hotel->tel,
+                    'location'=>$hotel->location,
+                    'cuisine'=>$hotel->cuisine,
+                    'portrait'=>$hotel->portrait,
+                    'menu'=>\model('LogicDish','logic')->findDishesByTel($hotel->tel)
+                    ));
+            }
+        }
+        return $newHotels;
+    }
+
+    /**
+     * 上线店家
+     * @param $tel
+     * @return mixed
+     */
+    public function onlineHotel($tel){
+        return \model('HotelUser','model')->updateHotel(new \app\common\pojo\Hotel(null,$tel,null,null,null,null,true,null));
     }
 }

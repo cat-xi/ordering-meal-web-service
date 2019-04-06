@@ -104,6 +104,7 @@ class Store
      * 添加菜单
      * 判断null 判断图片
      * 成功返回新菜单
+     * 判断是否已经审核!!!!!!
      */
     public function uploadMenu(){
         Config::set("default_return_type","json");
@@ -111,13 +112,12 @@ class Store
         $arr = input('menu');
         $list = json_decode($arr,true);
         $dishes=[];
+        //判断是否已经审核
+        if (model("Hotel","logic")->findHotelByTel($tel)->examine!=false)
+            return json(array("description"=>"error", "detail"=>"not examine"),400);
         for ($i=0;$i<count($list);$i++){
-//            echo $list[$i]['name'];
-
             if (empty($_FILES["$i"]['tmp_name'])){
                 return json(array("description"=>"error", "detail"=>"data error"),400);
-            }else{
-//                $img = file_get_contents(iconv('gb2312','utf-8',$_FILES["$i"]['tmp_name']));
             }
             if ($list["$i"]['name']==null||$list["$i"]['price']==null)
                 return json(array("description"=>"error", "detail"=>"data error"),400);

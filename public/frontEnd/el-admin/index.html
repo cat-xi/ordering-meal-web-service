@@ -4,17 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <title>管理员后台</title>
-    <script src="../lib/vue.js"></script>
-    <script src="../lib/vue-resource.js"></script>
-    <script src="../el-admin/index.js"></script>
-    <script src="../lib/elm.js"></script>
-    <!-- 引入样式 -->
-    <!--<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
-    <!-- 引入组件库 -->
-    <!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
-    <!-- 引入组件库 -->
-    <link rel="stylesheet" href="../lib/elm.css">
-    <link rel="stylesheet" href="../lib/elm2.css">
+    <script src="/frontEnd/lib/vue.js"></script>
+    <script src="/frontEnd/lib/vue-resource.js"></script>
+    <script src="/frontEnd/el-admin/index.js"></script>
+    <script src="/frontEnd/lib/elm.js"></script>
+    <link rel="stylesheet" href="/frontEnd/lib/elm.css">
+    <link rel="stylesheet" href="/frontEnd/lib/elm2.css">
     <!-- 引入组件库 -->
     <style>
         .el-aside {
@@ -68,7 +63,7 @@
         <el-main>
             <home-page v-if="view==1" v-bind:home="data"></home-page>
             <review-page v-if="view==2" v-bind:review="review"></review-page>
-            <online-page v-if="view==3"></online-page>
+            <online-page v-if="view==3" v-bind:online="online"></online-page>
             <store-page v-if="view==4"></store-page>
         </el-main>
     </el-container>

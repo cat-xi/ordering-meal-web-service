@@ -18,7 +18,7 @@ class Dish
     public $tel;//店家id
     public $name;//菜名
     public $price;//价格
-    public $picture;
+    public $picture;//图片
 
     /**
      * Dish constructor.

@@ -19,6 +19,7 @@ class Admin
 {
     /**
      * 登陆
+     * @return \think\response\Json
      */
     public function login(){
         Config::set("default_return_type","json");
@@ -32,8 +33,10 @@ class Admin
             return json(array("description"=>"error", "detail"=>"not null"),400);
         }
     }
+
     /**
      * 下线 删除session
+     * @return \think\response\Json
      */
     public function offline(){
         Config::set("default_return_type","json");
@@ -103,6 +106,28 @@ class Admin
             return json(array("description"=>"error", "detail"=>"error"),400);
         }else{
             $hotels = model("Hotel","logic")->findNotAuditHotels();
+            return  json(array("description"=>"OK","data"=>$hotels),200);
+        }
+    }
+
+    /**
+     * 待上线页面数据 待上线店家
+     * @return \think\response\Json
+     */
+    public function onlinePage(){
+        Config::set("default_return_type","json");
+        $hotels = model("Hotel","logic")->findNotOnline();
+        return  json(array("description"=>"OK","data"=>$hotels),200);
+    }
+
+    public function online(){
+        Config::set("default_return_type","json");
+        $tel = input("tel");
+        $int = model("Hotel","logic")->onlineHotel($tel);
+        if ($int!=1){
+            return json(array("description"=>"error", "detail"=>"error"),400);
+        }else{
+            $hotels = model("Hotel","logic")->findNotOnline();
             return  json(array("description"=>"OK","data"=>$hotels),200);
         }
     }
