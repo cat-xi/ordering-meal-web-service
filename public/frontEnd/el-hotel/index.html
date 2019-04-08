@@ -37,7 +37,14 @@
 <div id="app" style="height: 100%">
     <el-container id="con">
         <el-header height="30px">
-            <span>店家界面</span>
+            <el-row>
+                <el-col :span="22" :offset="1">
+                    <span>店家界面</span>
+                </el-col>
+                <el-col :span="1">
+                    <el-button v-on:click="offline" round size="mini">退出</el-button>
+                </el-col>
+            </el-row>
         </el-header>
         <el-container>
             <el-aside width="150px" height="100%-30px">

@@ -258,6 +258,15 @@ window.onload=function () {
                         break;
                 }
                 this.view = index;
+            },
+            offline(){
+                Vue.http.get("/index.php/index/Store/offline").then(res => {
+                    self.location='http://localhost:8888/frontEnd/el-hotel/login.html';
+                },response => {
+                    alert("下线失败");
+                    console.log("asd");
+                    // self.location='http://localhost:8888/frontEnd/el-hotel/login.html';
+                })
             }
         }
     });

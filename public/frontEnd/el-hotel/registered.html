@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%">
+<head>
+    <meta charset="UTF-8">
+    <title>店家注册</title>
+    <script src="/frontEnd/lib/vue.js"></script>
+    <script src="/frontEnd/lib/vue-resource.js"></script>
+    <script src="/frontEnd/lib/elm.js"></script>
+    <link rel="stylesheet" href="/frontEnd/lib/elm.css">
+    <link rel="stylesheet" href="/frontEnd/lib/elm2.css">
+    <style>
+        .el-col{
+            background-color: white;
+            padding: 10px 20px 10px 20px;
+        }
+    </style>
+</head>
+<body style="height: 100%">
+<div id="app" style="height: 100%;background-color: #EBF5FF;">
+    <el-row style="padding-top: 150px;padding-bottom: 30px">
+        <el-col :span="12" :offset="6">
+            <span>用户注册</span>
+        </el-col>
+    </el-row>
+    <el-row>
+        <el-col :span="6" :offset="6">
+            <el-input v-model="tel" placeholder="请输入电话">
+                <template slot="prepend">电话</template>
+            </el-input>
+        </el-col>
+        <el-col :span="6">
+            <el-input v-model="name" placeholder="店家名称">
+                <template slot="prepend">名称</template>
+            </el-input>
+        </el-col>
+        <el-col :span="6" :offset="6">
+            <el-input v-model="password1" type="password" placeholder="请输入密码">
+                <template slot="prepend">密码</template>
+            </el-input>
+        </el-col>
+        <el-col :span="6">
+            <el-input v-model="password2" type="password" placeholder="确认密码">
+                <template slot="prepend">密码</template>
+            </el-input>
+        </el-col>
+        <el-col :span="6" :offset="6">
+            <el-input v-model="location" placeholder="店家位置">
+                <template slot="prepend">位置</template>
+            </el-input>
+        </el-col>
+        <el-col :span="6">
+            <el-input v-model="cuisine" placeholder="店家菜系">
+                <template slot="prepend">菜系</template>
+            </el-input>
+        </el-col>
+        <el-col :span="12" :offset="6">
+            <span>头像:</span>
+            <input id="portrait" type="file" accept="image/*">
+        </el-col>
+        <el-col :span="12" :offset="6">
+            <el-button v-on:click="register" style="width:100%" type="primary">注册</el-button>
+        </el-col>
+    </el-row>
+</div>
+</body>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            name:'',
+            tel:'',
+            password1:'',
+            password2:'',
+            location:'',
+            cuisine:''
+        },
+        methods:{
+            //主持
+            register:function(){
+                if (this.password1!==this.password2){
+                    alert("密码不一致");
+                    return;
+                }
+                //注册
+                let formData = new FormData();
+                var menu=[];
+                formData.append("portrait",document.getElementById("portrait").files[0]);
+                menu.push({name:this.name,tel:this.tel,password:this.password1,location:this.location,cuisine:this.cuisine})
+                formData.append("menu",JSON.stringify(menu));
+                this.$http.post('/index.php/index/Store/register',formData).then(function(res){
+                    // console.log(res.body);
+                    window.location.href="login.html";
+                },function(res){
+                    alert('注册错误');
+                });
+            }
+        }
+    });
+</script>
+</html>

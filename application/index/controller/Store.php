@@ -29,14 +29,18 @@ class Store
      * 注册
      */
     public function register(){
-        $image = file_get_contents($_FILES['portrait']['tmp_name']);
-        $int = model("Hotel","logic")->registered(new Hotel(input('name'),input('tel'),input('password'),input('location'),input('cuisine'),null,null,$image));
+        Config::set("default_return_type","json");
+        if (empty($_FILES["portrait"]['tmp_name'])){
+            return json(array("description"=>"error", "detail"=>"not input"),400);
+        }
+        $image = file_get_contents(iconv('gb2312','utf-8',$_FILES["portrait"]['tmp_name']));
+        $json = json_decode(input('menu'),true);
+        $hotel = new Hotel($json[0]['name'],$json[0]['tel'],$json[0]['password'],$json[0]['location'],$json[0]['cuisine'],null,null,$image);
+        $int = model("Hotel","logic")->registered($hotel);
         if ($int==1){
-            return 'OK!';
-        }else if ($int ==-1){
-            return "不为null";
+            return json(array("description"=>"OK"),200);
         }else{
-            return "error";
+            return json(array("description"=>"error", "detail"=>"data error"),400);
         }
     }
     /**
@@ -87,7 +91,9 @@ class Store
      * 下线 删除session
      */
     public function offline(){
+        Config::set("default_return_type","json");
         Session::delete("hotel");
+        return json(array("description"=>"OK"),200);
     }
 
     /**
