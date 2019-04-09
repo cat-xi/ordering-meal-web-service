@@ -24,7 +24,7 @@
             <div style="background-color: white;margin-top: 50px;margin-bottom: 30px;">
                 <el-row>
                     <el-col :span="6" v-for="item of items">
-                        <hotel v-bind:hotel="item" style="border-radius: 4px;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)"></hotel>
+                        <hotel v-bind:hotel="item" style="border-radius: 4px;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);"></hotel>
                     </el-col>
                 </el-row>
             </div>
@@ -42,7 +42,7 @@
                 `<div style="height: 100%;background-color:#ffffff">
                 <el-row>
                     <el-col :span="12">
-                        <img style="width: 100%;height: 100%" v-bind:src="hotel.portrait" alt="">
+                        <img style="width: 150px;height: 150px" v-bind:src="hotel.portrait" alt="">
                     </el-col>
                     <el-col :span="12">
                         <h3>{{hotel.name}}</h3>

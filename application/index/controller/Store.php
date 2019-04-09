@@ -119,7 +119,7 @@ class Store
         $list = json_decode($arr,true);
         $dishes=[];
         //判断是否已经审核
-        if (model("Hotel","logic")->findHotelByTel($tel)->examine!=false)
+        if (model("Hotel","logic")->findHotelByTel($tel)->examine!=true)
             return json(array("description"=>"error", "detail"=>"not examine"),400);
         for ($i=0;$i<count($list);$i++){
             if (empty($_FILES["$i"]['tmp_name'])){
