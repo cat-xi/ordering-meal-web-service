@@ -9,6 +9,7 @@
 namespace app\index\controller;
 
 
+use app\common\pojo\Order;
 use app\common\pojo\Person;
 use think\Config;
 use think\Session;
@@ -70,9 +71,74 @@ class Client
         Session::delete("client");
         return json(array("description"=>"OK"),200);
     }
+
+    /**
+     * 查询全部店家
+     * @return \think\response\Json
+     */
     public function findHotels(){
         Config::set("default_return_type","json");
         $hotels = model("Hotel","logic")->findOnlineHotels();
         return json(array("description"=>"OK","data"=>$hotels),200);
+    }
+
+    /**
+     * 根据店家查询店家及菜单
+     * 在菜单内加入数量
+     */
+    public function findHotelByTel(){
+        Config::set("default_return_type","json");
+        $tel = input("tel");
+        $hotel = model("Hotel","logic")->findHotelByTel(input("tel"));
+        $menu = model('LogicDish','logic')->findDishesByTel($tel);
+        $newMenu=[];
+//        public $id;//id
+//        public $tel;//店家id
+//        public $name;//菜名
+//        public $price;//价格
+//        public $picture;//图片
+        foreach ($menu as $dish){
+            array_push($newMenu,array(
+                'id'=>$dish->id,
+                'name'=>$dish->name,
+                'price'=>$dish->price,
+                'picture'=>$dish->picture,
+                'count'=>0
+            ));
+        }
+        $data=array(
+            'hotel'=>$hotel,
+            'menu'=>$newMenu
+        );
+        //判断是否登陆
+        if (Session::get("client")==null)
+            return json(array("description"=>"error", "detail"=>"not login"),400);
+        return json(array("description"=>"OK","data"=>$data),200);
+    }
+
+    /**
+     * 创建订单，生成订单，加入session
+     * 用户订餐界面结算方法
+     */
+    public function makeOrder(){
+        Config::set("default_return_type","json");
+        $menu = input('menu');
+        $list = json_decode($menu,true);
+        $money = input('money');
+        $tel = input('tel');
+        $newMenu=[];
+        foreach ($list as $dish){
+            if ($dish['count']>0){
+                array_push($newMenu,[
+                    'id'=>$dish['id'],
+                    'name'=>$dish['name'],
+                    'price'=>$dish['price'],
+                    'count'=>$dish['count'],
+                ]);
+            }
+        }
+        $order = new Order(Session::get("client"),$tel,$newMenu,$money,null,-1);
+        Session::set('order',$order);
+        return json(array("description"=>"OK","data"=>Session::get('order')),200);
     }
 }

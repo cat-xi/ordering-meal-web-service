@@ -99,7 +99,7 @@ class Hotel extends Model
     }
 
     /**
-     * 带上线店家数据
+     * 等待上线店家数据
      * @return array json 包含name,tel,location,cuisine,portrait,menu(array)
      */
     public function findNotOnline(){

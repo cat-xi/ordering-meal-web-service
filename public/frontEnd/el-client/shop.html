@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" style="height:100%" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>店家</title>
+    <script src="/frontEnd/lib/vue.js"></script>
+    <script src="/frontEnd/lib/vue-resource.js"></script>
+    <script src="/frontEnd/lib/elm.js"></script>
+    <link rel="stylesheet" href="/frontEnd/lib/elm.css">
+    <link rel="stylesheet" href="/frontEnd/lib/elm2.css">
+    <style>
+        #r {
+            box-sizing: border-box;
+            border: #66b1ff solid 4px;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            overflow: hidden;
+            float: left;
+            margin: auto;
+        }
+    </style>
+</head>
+<body style="height: 100%">
+<div id="app" style="background-color: #F5F5F5;height: 100%">
+    <el-row style="background-color: white">
+        <el-col :span="3" :offset="2">
+            <img v-bind:src="hotel.portrait" style="width: 150px;height: 150px" id="r" alt="">
+        </el-col>
+        <el-col :span="4">
+            <h2>{{hotel.name}}</h2>
+        </el-col>
+    </el-row>
+    <el-row>
+        <el-col :span="14" :offset="2">
+            <h3>全部商品</h3>
+            <!--商品展示-->
+            <el-row :gutter="20">
+                <el-col :span="12" v-for="dish of menu" style="padding-top: 10px">
+                    <hotel-show v-bind:dish="dish" style="border-radius: 4px;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);"></hotel-show>
+                </el-col>
+            </el-row>
+        </el-col>
+        <!--<el-col :span="7">-->
+        <!--</el-col>-->
+    </el-row>
+    <div style="position: fixed;bottom: 0px;right:0px ;width: 320px;border-top: 2px solid #0c65d2; box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">
+        <el-row style="background: #F4F4F4">
+            <el-col :span="8" :offset="2" style="padding-top: 5px;padding-bottom: 5px">
+                <span>购物车</span>
+            </el-col>
+        </el-row>
+        <el-row v-for="dish in menu" style="background: white">
+            <template v-if="dish.count>0">
+                <el-col :span="12">
+                    <span style="margin-left: 5px">{{dish.name}}</span>
+                </el-col>
+                <el-col :span="6">
+                    <span>{{dish.count}}</span>
+                </el-col>
+                <el-col :span="6">
+                    <span style="color: red">{{dish.count*dish.price}}¥</span>
+                </el-col>
+            </template>
+        </el-row>
+        <el-row>
+            <el-col :span="12">
+                <span>{{money}}</span>
+            </el-col>
+            <el-col :span="12">
+                <el-button v-on:click="settlement" style="width:100%" type="primary">结算</el-button>
+            </el-col>
+        </el-row>
+    </div>
+</div>
+</body>
+<script>
+    window.onload=function(){
+        //商品展示界面
+        Vue.component('hotel-show', {
+            props: {
+                dish: Object
+            },
+            data: function () {
+                return {
+                    select: false
+                }
+            },
+            template:
+                `<div style="background-color: white;position: relative">
+                <el-row>
+                    <el-col :span="8">
+                        <img v-bind:src="dish.picture" style="width: 100px;height: 100px" alt="">
+                    </el-col>
+                    <el-col :span="10">
+                        <h4>{{dish.name}}</h4>
+                        <span style="color: red">{{dish.price}}¥</span>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-input-number v-if="select" v-model="dish.count" size="mini" @change="handleChange" :min="0" label="描述文字" style="position: absolute;right: 0;bottom: 0;"></el-input-number>
+                        <el-button v-else type="success" round size="small" v-on:click="select=true;dish.count=1" style="position: absolute;right: 0;bottom: 0">加入购物车</el-button>
+                    </el-col>
+                </el-row>
+            </div>`
+            ,methods:{
+                //购物车商品数量更改
+                handleChange(){
+                    if (this.dish.count===0){
+                        this.select=false;
+                    }
+                },
+            }
+        })
+        var app = new Vue({
+            el:"#app",
+            data:{
+                //店家信息
+                hotel:{
+                    name:'',
+                    portrait:'',
+                },
+                //菜单
+                menu:[]
+            },
+            computed: {
+                //价格
+                money:function(){
+                    if (this.menu===null)
+                        return 0;
+                    return this.menu.reduce((a,x)=>a+x.count*x.price,0)
+                }
+            },
+            methods:{
+                //结算方法
+                settlement:function () {
+                    console.log(JSON.stringify(this.menu));
+                    console.log(this.money);
+                    Vue.http.post("/index.php/index/Client/makeOrder",{menu:JSON.stringify(this.menu),money:this.money,tel:tel}).then(res => {
+                        console.log(res.body);
+
+                    },response => {
+                        console.log("error");
+                    })
+                }
+            }
+        });
+        //获取url后?tel
+        var r = window.location.search.substr(1).match(new RegExp("(^|&)" + 'tel' + "=([^&]*)(&|$)"));
+        var tel;
+        if (r != null){
+            tel = unescape(r[2]);
+            console.log(tel);
+        }
+        else {
+            window.location.href="order.html";
+        }
+        //post 获取店家信息及菜单
+        Vue.http.post("/index.php/index/Client/findHotelByTel",{tel:tel}).then(res => {
+            console.log(res.body);
+            app.hotel = res.body.data.hotel;
+            app.menu = res.body.data.menu;
+        },response => {
+            console.log("error");
+            window.location.href="index.html";
+        })
+    }
+</script>
+</html>

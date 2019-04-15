@@ -120,6 +120,10 @@ class Admin
         return  json(array("description"=>"OK","data"=>$hotels),200);
     }
 
+    /**
+     * 管理员未上线数据
+     * @return \think\response\Json
+     */
     public function online(){
         Config::set("default_return_type","json");
         $tel = input("tel");
