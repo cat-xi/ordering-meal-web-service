@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+    <meta charset="UTF-8">
+    <title>我的订单</title>
+    <script src="/frontEnd/lib/vue.js"></script>
+    <script src="/frontEnd/lib/vue-resource.js"></script>
+    <script src="/frontEnd/lib/elm.js"></script>
+    <link rel="stylesheet" href="/frontEnd/lib/elm.css">
+    <link rel="stylesheet" href="/frontEnd/lib/elm2.css">
+</head>
+<body style="height: 100%">
+<div id="app" style="height: 100%;background-color: #EBF5FF;">
+    <el-row style="padding-top: 50px;">
+        <el-col :span="5" :offset="1">
+            <h1>我的订单</h1>
+        </el-col>
+        <el-col :span="1" :offset="16">
+            <a href="index.html">首页</a>
+        </el-col>
+    </el-row>
+    <el-row>
+        <el-col :span="20" :offset="2">
+            <el-table :data="orders"
+                      height="500"
+                      border
+                      style="width: 100%">
+                <el-table-column
+                        prop="hotel"
+                        label="店家电话">
+                </el-table-column>
+                <el-table-column
+                        width="500"
+                        label="菜单">
+                    <el-table slot-scope="scope" :data="orders[scope.$index].menu" height="150">
+                        <el-table-column
+                                prop="name"
+                                label="菜名">
+                        </el-table-column>
+                        <el-table-column
+                                prop="count"
+                                label="份数">
+                        </el-table-column>
+                    </el-table>
+                </el-table-column>
+                <el-table-column
+                        prop="money"
+                        label="总计">
+                </el-table-column>
+                <el-table-column label="状态">
+                    <template slot-scope="scope">
+                        <span v-if="orders[scope.$index].condition==0">店家接单中</span>
+                        <template v-if="orders[scope.$index].condition==1">
+                            <span>配送中</span>
+                            <el-button size="mini" type="danger" v-on:click="confirm(scope.$index)">确认收货</el-button>
+                        </template>
+                        <span v-if="orders[scope.$index].condition==2">已完成</span>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-col>
+    </el-row>
+</div>
+</body>
+<script>
+    window.onload=function () {
+        var app = new Vue({
+            el: '#app',
+            data:{
+                orders:[]
+            },methods:{
+                //确认收货
+                confirm:function (index) {
+                    this.$http.post('/index.php/index/Client/confirmOrder',{id:this.orders[index].id}).then(function(res){
+                        console.log(res.body);
+                        this.orders=res.body.data;
+                    },function(res){
+                        alert('密码错误');
+                    });
+                }
+            }
+        });
+        Vue.http.get("/index.php/index/Client/allOrders").then(res => {
+            app.orders=res.body.data
+            app.orders.reverse();
+            console.log(res.body.data);
+            console.log("页面刷新了")
+        },response => {
+            console.log("asd");
+            // self.location='http://localhost:8888/frontEnd/el-hotel/login.html';
+        })
+    }
+</script>
+</html>

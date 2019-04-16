@@ -144,7 +144,7 @@ class Client
     }
 
     /**
-     * 获取当前用户订单信息
+     * 获取当前用户待处理订单信息
      * @return \think\response\Json
      */
     public function getOrder(){
@@ -169,5 +169,29 @@ class Client
         model("ModelOrder","model")->insertOrder($data);
         Session::delete('order');
         return json(array("description"=>"OK"),200);
+    }
+
+    /**
+     * 获取用户全部订单
+     * @return \think\response\Json
+     */
+    public function allOrders(){
+        Config::set("default_return_type","json");
+        //判断是否登陆
+        if (Session::get("client")==null)
+            return json(array("description"=>"error", "detail"=>"not login"),400);
+        return json(array("description"=>"OK","data"=>model('LogicOrder','logic')->findOrdersByClient(Session::get("client"))),200);
+    }
+
+
+    /**
+     * 确认订单 成功返回新的订单
+     * @return \think\response\Json
+     */
+    public function confirmOrder(){
+        Config::set("default_return_type","json");
+        //确认订单，更改数据
+        model('LogicOrder','logic')->confirmOrder(input('id'));
+        return json(array("description"=>"OK","data"=>model('LogicOrder','logic')->findOrdersByClient(Session::get("client"))),200);
     }
 }

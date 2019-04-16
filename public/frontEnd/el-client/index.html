@@ -20,9 +20,10 @@
         <el-col :span="1"><div>&nbsp;</div></el-col>
         <el-col :span="22">
             <el-row height="50px">
-                <el-col :span="3" :offset="20">
+                <el-col :span="5" :offset="18">
                     <div>
                         <template v-if="login" style="height:50%">
+                            <el-button v-on:click="myOrder">我的订单</el-button>
                             <el-button v-on:click="offline">退出</el-button>
                         </template>
                         <template v-else style="height:50%">
@@ -34,7 +35,7 @@
                     </div>
                 </el-col>
                 <el-col :span="1">
-                    <el-button type="success" style="height:50%">我要开店</el-button>
+                    <el-button type="success" v-on:click="openShop" style="height:50%">我要开店</el-button>
                 </el-col>
             </el-row>
             <el-row>
@@ -73,6 +74,13 @@
                         // self.location='http://localhost:8888/frontEnd/el-admin/login.html';
                         // window.location.href="login.html";
                     })
+                },
+                //我的订单
+                myOrder:function (){
+                    window.location.href="/frontEnd/el-client/myorder.html";
+                },
+                openShop:function () {
+                    window.location.href="/frontEnd/el-hotel/login.html";
                 }
             }
         });

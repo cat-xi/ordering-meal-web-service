@@ -50,7 +50,7 @@ class ModelOrder extends Model
 
     /**
      * 根据店家查找订单
-     * @param $hotel
+     * @param $hotel string 店家id
      * @return array
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
@@ -58,6 +58,24 @@ class ModelOrder extends Model
      */
     public function selectOrdersByHotel($hotel){
         $listOrders = $this->table('orders')->where('hotel',$hotel)->field('id,client,hotel,money,address,condition')->select();
+        $orders=[];
+        foreach ($listOrders as $order){
+            $menu = $this->table('order_menu')->where('order_id',$order['id'])->field('name,price,count')->select();
+            array_push($orders,new Order($order['id'],$order['client'],$order['hotel'],$menu,$order['money'],$order['address'],$order['condition']));
+        }
+        return $orders;
+    }
+
+    /**
+     * 根据用户查找订单
+     * @param $client string 用户id
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function selectOrdersByClient($client){
+        $listOrders = $this->table('orders')->where('client',$client)->field('id,client,hotel,money,address,condition')->select();
         $orders=[];
         foreach ($listOrders as $order){
             $menu = $this->table('order_menu')->where('order_id',$order['id'])->field('name,price,count')->select();
