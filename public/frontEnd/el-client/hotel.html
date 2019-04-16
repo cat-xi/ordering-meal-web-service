@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+    <meta charset="UTF-8">
+    <title>店家选择</title>
+    <script src="/frontEnd/lib/vue.js"></script>
+    <script src="/frontEnd/lib/vue-resource.js"></script>
+    <script src="/frontEnd/lib/elm.js"></script>
+    <link rel="stylesheet" href="/frontEnd/lib/elm.css">
+    <link rel="stylesheet" href="/frontEnd/lib/elm2.css">
+</head>
+<body style="height: 100%">
+<div id="app" style="background-color: #E9EEF3;height: 100%">
+    <el-row>
+        <el-col :span="22" :offset="1">
+            <el-row style="background-color: white;margin-top: 50px;margin-bottom: 30px;height: 50px">
+                <span>商家分类：全部店家</span>
+            </el-row>
+        </el-col>
+    </el-row>
+    <el-row>
+        <el-col :span="22" :offset="1">
+            <div style="background-color: white;margin-top: 50px;margin-bottom: 30px;">
+                <el-row>
+                    <el-col :span="6" v-for="item of items">
+                        <hotel v-bind:hotel="item" style="border-radius: 4px;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);"></hotel>
+                    </el-col>
+                </el-row>
+            </div>
+        </el-col>
+    </el-row>
+</div>
+</body>
+<script>
+    window.onload=function(){
+        Vue.component('hotel', {
+            props: {
+                hotel: Object
+            },
+            template:
+                `<div style="height: 100%;background-color:#ffffff">
+                <el-row>
+                    <el-col :span="12">
+                        <img style="width: 150px;height: 150px" v-bind:src="hotel.portrait" alt="">
+                    </el-col>
+                    <el-col :span="12">
+                        <a :href="'shop.html?tel='+hotel.tel" style="color: black"><h3>{{hotel.name}}</h3></a>
+                    </el-col>
+                </el-row>
+            </div>`
+        })
+        var app = new Vue({
+            el: '#app',
+            data:{
+                items:[]
+            }
+        });
+        Vue.http.get("/index.php/index/Client/findHotels").then(res => {
+            app.items=res.body.data;
+        },response => {
+            // self.location='http://localhost:8888/frontEnd/el-admin/login.html';
+            // window.location.href="login.html";
+        })
+    }
+</script>
+</html>

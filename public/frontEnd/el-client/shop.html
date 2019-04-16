@@ -2,12 +2,13 @@
 <html lang="en" style="height:100%" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>店家</title>
+    <title>选购</title>
     <script src="/frontEnd/lib/vue.js"></script>
     <script src="/frontEnd/lib/vue-resource.js"></script>
     <script src="/frontEnd/lib/elm.js"></script>
     <link rel="stylesheet" href="/frontEnd/lib/elm.css">
     <link rel="stylesheet" href="/frontEnd/lib/elm2.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <style>
         #r {
             box-sizing: border-box;
@@ -44,31 +45,72 @@
         <!--<el-col :span="7">-->
         <!--</el-col>-->
     </el-row>
+
+
+    <!--<div style="position: fixed;bottom: 0px;right:0px ;width: 320px;border-top: 2px solid #0c65d2; box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">-->
+        <!--<el-row style="background: #F4F4F4">-->
+            <!--<el-col :span="8" :offset="2" style="padding-top: 5px;padding-bottom: 5px">-->
+                <!--<span>购物车</span>-->
+            <!--</el-col>-->
+        <!--</el-row>-->
+        <!--<el-row v-for="dish in menu" style="background: white">-->
+            <!--<template v-if="dish.count>0">-->
+                <!--<el-col :span="12">-->
+                    <!--<span style="margin-left: 5px">{{dish.name}}</span>-->
+                <!--</el-col>-->
+                <!--<el-col :span="6">-->
+                    <!--<span>{{dish.count}}</span>-->
+                <!--</el-col>-->
+                <!--<el-col :span="6">-->
+                    <!--<span style="color: red">{{dish.count*dish.price}}¥</span>-->
+                <!--</el-col>-->
+            <!--</template>-->
+        <!--</el-row>-->
+        <!--<el-row>-->
+            <!--<el-col :span="12">-->
+                <!--<span>{{money}}</span>-->
+            <!--</el-col>-->
+            <!--<el-col :span="12">-->
+                <!--<el-button v-on:click="settlement" style="width:100%" type="primary">结算</el-button>-->
+            <!--</el-col>-->
+        <!--</el-row>-->
+    <!--</div>-->
+
+
+
     <div style="position: fixed;bottom: 0px;right:0px ;width: 320px;border-top: 2px solid #0c65d2; box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)">
         <el-row style="background: #F4F4F4">
-            <el-col :span="8" :offset="2" style="padding-top: 5px;padding-bottom: 5px">
-                <span>购物车</span>
+            <el-col :span="8"  style="padding-top: 5px;padding-bottom: 5px">
+                <span style="margin-left:8%">购物车</span>
+                <span class="glyphicon glyphicon-shopping-cart" style="color: #3a8ee6" aria-hidden="true"></span>
             </el-col>
         </el-row>
         <el-row v-for="dish in menu" style="background: white">
             <template v-if="dish.count>0">
-                <el-col :span="12">
-                    <span style="margin-left: 5px">{{dish.name}}</span>
-                </el-col>
-                <el-col :span="6">
-                    <span>{{dish.count}}</span>
-                </el-col>
-                <el-col :span="6">
-                    <span style="color: red">{{dish.count*dish.price}}¥</span>
-                </el-col>
+                <div style="border-bottom: 1px solid #e7e7e7">
+                    <el-col :span="12">
+                        <span style="margin-left: 5px">{{dish.name}}</span>
+                    </el-col>
+                    <el-col :span="6">
+                        <span>{{dish.count}}</span>
+                    </el-col>
+                    <el-col :span="6">
+                        <span style="color: red">{{dish.count*dish.price}}¥</span>
+                    </el-col>
+                </div>
             </template>
         </el-row>
         <el-row>
-            <el-col :span="12">
-                <span>{{money}}</span>
+            <el-col :span="8">
+                <el-badge :value="counts" style="margin-top: 10px;margin-left: 30px">
+                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+                </el-badge>
+            </el-col>
+            <el-col :span="4" style="padding-top: 10px">
+                <span>¥{{money}}</span>
             </el-col>
             <el-col :span="12">
-                <el-button v-on:click="settlement" style="width:100%" type="primary">结算</el-button>
+                <el-button v-on:click="settlement" style="width:100%" size="medium" type="primary">去结算></el-button>
             </el-col>
         </el-row>
     </div>
@@ -128,6 +170,12 @@
                     if (this.menu===null)
                         return 0;
                     return this.menu.reduce((a,x)=>a+x.count*x.price,0)
+                },
+                //菜品数量
+                counts:function () {
+                    if (this.menu===null)
+                        return 0;
+                    return this.menu.reduce((a,x)=>a+x.count,0)
                 }
             },
             methods:{
@@ -137,7 +185,8 @@
                     console.log(this.money);
                     Vue.http.post("/index.php/index/Client/makeOrder",{menu:JSON.stringify(this.menu),money:this.money,tel:tel}).then(res => {
                         console.log(res.body);
-
+                        window.location.href="order.html";
+                        //跳转结算页面
                     },response => {
                         console.log("error");
                     })
@@ -152,7 +201,7 @@
             console.log(tel);
         }
         else {
-            window.location.href="order.html";
+            window.location.href="hotel.html";
         }
         //post 获取店家信息及菜单
         Vue.http.post("/index.php/index/Client/findHotelByTel",{tel:tel}).then(res => {

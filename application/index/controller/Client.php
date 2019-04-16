@@ -119,6 +119,7 @@ class Client
     /**
      * 创建订单，生成订单，加入session
      * 用户订餐界面结算方法
+     * @return \think\response\Json
      */
     public function makeOrder(){
         Config::set("default_return_type","json");
@@ -139,6 +140,33 @@ class Client
         }
         $order = new Order(Session::get("client"),$tel,$newMenu,$money,null,-1);
         Session::set('order',$order);
+        return json(array("description"=>"OK"),200);
+    }
+
+    /**
+     * 获取当前用户订单信息
+     * @return \think\response\Json
+     */
+    public function getOrder(){
+        Config::set("default_return_type","json");
+        //判断是否登陆
+        if (Session::get("client")==null)
+            return json(array("description"=>"error", "detail"=>"not login"),400);
+        //判断是否有订单生成
+        if (Session::get('order')==null)
+            return json(array("description"=>"error", "detail"=>"not make order"),400);
         return json(array("description"=>"OK","data"=>Session::get('order')),200);
+    }
+
+    /**
+     * 结算,提交订单
+     * @return \think\response\Json
+     */
+    public function placeOrder(){
+        Config::set("default_return_type","json");
+        $order = Session::get('order');
+        $data = new Order($order->client,$order->hotel,$order->menu,$order->money,input('address'),$order->condition);
+        model("ModelOrder","model")->insertOrder($data);
+        return json(array("description"=>"OK"),200);
     }
 }

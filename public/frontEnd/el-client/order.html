@@ -2,7 +2,7 @@
 <html lang="en" style="height: 100%">
 <head>
     <meta charset="UTF-8">
-    <title>订餐</title>
+    <title>结算</title>
     <script src="/frontEnd/lib/vue.js"></script>
     <script src="/frontEnd/lib/vue-resource.js"></script>
     <script src="/frontEnd/lib/elm.js"></script>
@@ -10,56 +10,102 @@
     <link rel="stylesheet" href="/frontEnd/lib/elm2.css">
 </head>
 <body style="height: 100%">
-<div id="app" style="background-color: #E9EEF3;height: 100%">
+<div id="app" style="background-color: #F3F3F3;height: 100%;padding-top: 50px">
     <el-row>
-        <el-col :span="22" :offset="1">
-            <el-row style="background-color: white;margin-top: 50px;margin-bottom: 30px;height: 50px">
-                <span>商家分类：全部店家</span>
+        <el-col :span="6" :offset="3" style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);background-color:white">
+            <el-row>
+                <el-col :span="24">
+                    <h2>订单详情</h2>
+                </el-col>
+                <el-col :span="20" :offset="2">
+                    <el-table :data="menu"
+                              height="300"
+                              border
+                              style="width: 100%">
+                        <el-table-column
+                                prop="name"
+                                label="商品">
+                        </el-table-column>
+                        <el-table-column
+                                prop="count"
+                                label="份数"
+                                width="50">
+                        </el-table-column>
+                        <el-table-column label="小记" width="80">
+                            <template slot-scope="scope">
+                                <span>{{menu[scope.$index].count*menu[scope.$index].price}}¥</span>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-col>
+                <el-col :span="8" :offset="16" style="margin-top: 30px">
+                    <span style="color: red;font-size: 30px">¥{{money}}</span>
+                </el-col>
             </el-row>
         </el-col>
-    </el-row>
-    <el-row>
-        <el-col :span="22" :offset="1">
-            <div style="background-color: white;margin-top: 50px;margin-bottom: 30px;">
-                <el-row>
-                    <el-col :span="6" v-for="item of items">
-                        <hotel v-bind:hotel="item" style="border-radius: 4px;box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);"></hotel>
-                    </el-col>
-                </el-row>
-            </div>
+        <el-col :span="11" :offset="1" style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);background-color: white">
+            <el-row>
+                <el-col :span="22" :offset="1">
+                    <h3>收货地址</h3>
+                </el-col>
+                <el-col :span="22" :offset="1">
+                    <el-input
+                            type="textarea"
+                            :rows="2"
+                            placeholder="请输入内容"
+                            v-model="address">
+                    </el-input>
+                </el-col>
+                <el-col :span="22" :offset="1">
+                    <h3>付款方式</h3>
+                </el-col>
+                <el-col :span="22" :offset="1">
+                    <div style="padding: 10px 50px 10px 5px;border: 1px solid #9ed0ff">
+                        <span>在线支付</span><div></div>
+                        <span>支持微信、支付宝、QQ钱包及大部分银行卡</span>
+                    </div>
+                </el-col>
+                <el-col :span="22" :offset="1">
+                    <h3>选择优惠</h3>
+                </el-col>
+                <el-col :span="22" :offset="1">
+                    <span>使用红包:无可用红包</span>
+                </el-col>
+                <el-col :span="5" :offset="17" style="padding-top: 150px;padding-bottom: 20px">
+                    <el-button  v-on:click="placeOrder" type="danger">确认下单</el-button>
+                </el-col>
+            </el-row>
         </el-col>
     </el-row>
 </div>
 </body>
 <script>
-    window.onload=function(){
-        Vue.component('hotel', {
-            props: {
-                hotel: Object
-            },
-            template:
-                `<div style="height: 100%;background-color:#ffffff">
-                <el-row>
-                    <el-col :span="12">
-                        <img style="width: 150px;height: 150px" v-bind:src="hotel.portrait" alt="">
-                    </el-col>
-                    <el-col :span="12">
-                        <a :href="'shop.html?tel='+hotel.tel" style="color: black"><h3>{{hotel.name}}</h3></a>
-                    </el-col>
-                </el-row>
-            </div>`
-        })
+    window.onload=function () {
         var app = new Vue({
             el: '#app',
-            data:{
-                items:[]
+            data: {
+                //菜单
+                menu:[],
+                //总金额
+                money:0,
+                //收货地址
+                address:'',
+            },methods:{
+                placeOrder:function () {
+                    Vue.http.post("/index.php/index/Client/placeOrder",{address:this.address}).then(res => {
+                        console.log(res.body);
+                    },response => {
+                        console.log("error");
+                    })
+                }
             }
         });
-        Vue.http.get("/index.php/index/Client/findHotels").then(res => {
-            app.items=res.body.data;
+        Vue.http.get("/index.php/index/Client/getOrder").then(res => {
+            console.log(res.body);
+            app.menu=res.body.data.menu;
+            app.money=res.body.data.money;
         },response => {
-            // self.location='http://localhost:8888/frontEnd/el-admin/login.html';
-            // window.location.href="login.html";
+            console.log("error");
         })
     }
 </script>
