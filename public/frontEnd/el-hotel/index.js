@@ -194,12 +194,65 @@ window.onload=function () {
     })
     Vue.component('order-page', {
         props: {
-            hotel: Object
+            orders: Array
         },
         template:
-            `<div style="height: 100%;background-color: mediumpurple">
-                订单
-            </div>`
+            `<div style="height: 100%;">
+                <el-row>
+                    <el-col :span="2" :offset="1">
+                        <h1>订单</h1>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="20" :offset="2">
+                        <el-table :data="orders"
+                                height="500"
+                                border
+                                style="width: 100%">
+                            <el-table-column
+                                    prop="client"
+                                    label="用户电话">
+                            </el-table-column>   
+                            <el-table-column
+                                    width="500"
+                                    label="菜单">
+                                <el-table slot-scope="scope" :data="orders[scope.$index].menu" height="150">
+                                    <el-table-column
+                                            prop="name"
+                                            label="菜名">
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="count"
+                                            label="份数">
+                                    </el-table-column>
+                                </el-table>
+                            </el-table-column>
+                            <el-table-column
+                                    prop="money"
+                                    label="总计">
+                            </el-table-column>
+                            <el-table-column label="状态">
+                                <template slot-scope="scope">
+                                    <el-button v-if="orders[scope.$index].condition==0" size="mini" type="danger" v-on:click="shopkeeperOrders(scope.$index)">接单</el-button>
+                                    <span v-if="orders[scope.$index].condition==1">配送中</span>
+                                    <span v-if="orders[scope.$index].condition==2">已完成</span>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </el-col>
+                </el-row>
+            </div>`,
+        methods:{
+            //店家接单方法 post
+            shopkeeperOrders(index){
+                Vue.http.post("/index.php/index/Store/shopkeeperOrders",{id:this.orders[index].id}).then(res => {
+                    console.log(res.body);
+                    this.orders = res.body.data;
+                },response => {
+                    console.log("error");
+                })
+            }
+        }
     })
     Vue.component('set-page', {
         props: {
@@ -231,12 +284,15 @@ window.onload=function () {
                 //表格数据
                 table:[],
                 fun:'0'
-            }
+            },
+            //订单信息
+            orders:[]
         },
         methods:{
             showPage(index, indexPath) {
                 switch (index) {
                     case '1':
+                        //首页
                         Vue.http.get("/index.php/index/Store/oneself").then(res => {
                             app.home=res.body.data
                             console.log(res.body.data );
@@ -247,9 +303,22 @@ window.onload=function () {
                         })
                         break;
                     case '2':
+                        //菜单
                         Vue.http.get("/index.php/index/Store/menu").then(res => {
                             app.menu.table=res.body.data
                             console.log(res.body.data );
+                            console.log("页面刷新了")
+                        },response => {
+                            console.log("asd");
+                            // self.location='http://localhost:8888/frontEnd/el-hotel/login.html';
+                        })
+                        break;
+                    case '3':
+                        // 订单
+                        Vue.http.get("/index.php/index/Store/findOrders").then(res => {
+                            app.orders=res.body.data
+                            app.orders.reverse();
+                            console.log(res.body.data);
                             console.log("页面刷新了")
                         },response => {
                             console.log("asd");

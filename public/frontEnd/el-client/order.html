@@ -91,9 +91,11 @@
                 //收货地址
                 address:'',
             },methods:{
+                //结算方法
                 placeOrder:function () {
                     Vue.http.post("/index.php/index/Client/placeOrder",{address:this.address}).then(res => {
                         console.log(res.body);
+                        //跳转页面。。。。。。
                     },response => {
                         console.log("error");
                     })

@@ -76,7 +76,7 @@
             <el-main height="95%">
                 <home-page v-if="view==1" v-bind:home="home"></home-page>
                 <menu-page v-if="view==2" v-bind:menu="menu"></menu-page>
-                <order-page v-if="view==3"></order-page>
+                <order-page v-if="view==3" v-bind:orders="orders"></order-page>
                 <set-page v-if="view==4"></set-page>
             </el-main>
         </el-container>

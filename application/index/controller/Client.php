@@ -138,7 +138,7 @@ class Client
                 ]);
             }
         }
-        $order = new Order(Session::get("client"),$tel,$newMenu,$money,null,-1);
+        $order = new Order(null,Session::get("client"),$tel,$newMenu,$money,null,-1);
         Session::set('order',$order);
         return json(array("description"=>"OK"),200);
     }
@@ -159,14 +159,15 @@ class Client
     }
 
     /**
-     * 结算,提交订单
+     * 结算,提交订单,删除session
      * @return \think\response\Json
      */
     public function placeOrder(){
         Config::set("default_return_type","json");
         $order = Session::get('order');
-        $data = new Order($order->client,$order->hotel,$order->menu,$order->money,input('address'),$order->condition);
+        $data = new Order($order->id,$order->client,$order->hotel,$order->menu,$order->money,input('address'),0);
         model("ModelOrder","model")->insertOrder($data);
+        Session::delete('order');
         return json(array("description"=>"OK"),200);
     }
 }

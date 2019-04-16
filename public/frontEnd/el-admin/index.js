@@ -149,8 +149,7 @@ window.onload=function () {
                 </el-table-column>
                 <el-table-column label="审核">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="danger" v-on:click="onlineHotel(scope.$index)">上线
-                        </el-button>
+                        <el-button size="mini" type="danger" v-on:click="onlineHotel(scope.$index)">上线</el-button>
                     </template>
                 </el-table-column>
             </el-table>

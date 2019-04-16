@@ -25,4 +25,24 @@ class LogicOrder extends Model
             return 0;
         return 1;
     }
+
+    /**
+     * 全部订单
+     * @param $hotel
+     * @return mixed
+     */
+    public function findOrdersByHotel($hotel){
+        $data = \model("ModelOrder",'model')->selectOrdersByHotel($hotel);
+        return $data;
+    }
+
+    /**
+     * 店家接单
+     * @param $id int 订单id
+     * @return mixed
+     */
+    public function shopkeeperOrders($id){
+        $order = new Order($id,null,null,null,null,null,1);
+        return \model("ModelOrder",'model')->updateOrder($order);
+    }
 }

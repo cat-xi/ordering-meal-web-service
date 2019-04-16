@@ -72,12 +72,4 @@ class ModelDish extends Model
         $dish = $this->where("id",$id)->field('id,name,tel,price,picture')->find();
         return new Dish($dish['id'],$dish['tel'],$dish['name'],$dish['price'],$dish['picture']);
     }
-//    public function selectAllHotels(){
-//        $hotels=[];
-//        $list = $this->field('name,tel,password,location,cuisine,examine,online,portrait')->select();
-//        foreach ($list as $hotel){
-//            array_push($hotels,new Hotel($hotel['name'],$hotel['tel'],$hotel['password'],$hotel['location'],$hotel['cuisine'],$hotel['examine'],$hotel['online'],$hotel['portrait']));
-//        }
-//        return $hotels;
-//    }
 }

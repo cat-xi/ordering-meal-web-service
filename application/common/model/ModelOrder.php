@@ -47,4 +47,45 @@ class ModelOrder extends Model
             $this->table('order_menu')->insertAll($menu);
         });
     }
+
+    /**
+     * 根据店家查找订单
+     * @param $hotel
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function selectOrdersByHotel($hotel){
+        $listOrders = $this->table('orders')->where('hotel',$hotel)->field('id,client,hotel,money,address,condition')->select();
+        $orders=[];
+        foreach ($listOrders as $order){
+            $menu = $this->table('order_menu')->where('order_id',$order['id'])->field('name,price,count')->select();
+            array_push($orders,new Order($order['id'],$order['client'],$order['hotel'],$menu,$order['money'],$order['address'],$order['condition']));
+        }
+        return $orders;
+    }
+
+    /**
+     * 更新订单
+     * @param Order $order
+     * @return
+     */
+    public function updateOrder(Order $order){
+        $data=[];
+        if ($order->id==null)
+            return -1;
+        if ($order->hotel!=null)
+            $data+=array('hotel'=>$order->hotel);
+        if ($order->money!=null)
+            $data+=array('money'=>$order->money);
+        if ($order->address!=null)
+            $data+=array('address'=>$order->address);
+        if ($order->client!=null)
+            $data+=array('client'=>$order->client);
+        if ($order->condition!=null)
+            $data+=array('condition'=>$order->condition);
+        $data += array('id'=>$order->id);
+        return $this->table('orders')->where('id',$order->id)->update($data);
+    }
 }

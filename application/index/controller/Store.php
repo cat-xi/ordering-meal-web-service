@@ -147,9 +147,39 @@ class Store
         return  json(array("description"=>"OK","data"=>model("LogicDish","logic")->findDishesByTel($tel)),200);
     }
 
+    /**
+     * 显示菜品图片
+     * @param $id int 菜品id
+     */
     public function dish($id){
         $file = model("LogicDish","logic")->findImageById($id);
         header('content-type:image');
         echo $file;
+    }
+
+    /**
+     * 查询当前店家的订单
+     * @return \think\response\Json
+     */
+    public function findOrders(){
+        Config::set("default_return_type","json");
+        $tel = Session::get('hotel');
+        if ($tel==null)
+            return json(array("description"=>"error", "detail"=>"not login"),400);
+        return  json(array("description"=>"OK","data"=>model('LogicOrder','logic')->findOrdersByHotel($tel)),200);
+    }
+
+    /**
+     * 店家接单
+     * @return \think\response\Json
+     */
+    public function shopkeeperOrders(){
+        Config::set("default_return_type","json");
+        $int = input("id");
+        $tel = Session::get('hotel');
+        if ($int==null)
+            return json(array("description"=>"error", "detail"=>"not null"),400);
+        model('LogicOrder','logic')->shopkeeperOrders($int);
+        return  json(array("description"=>"OK","data"=>model('LogicOrder','logic')->findOrdersByHotel($tel)),200);
     }
 }
