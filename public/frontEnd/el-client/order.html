@@ -93,11 +93,17 @@
             },methods:{
                 //结算方法
                 placeOrder:function () {
+                    if (this.address===''){
+                        alert("地址不为null")
+                        return;
+                    }
                     Vue.http.post("/index.php/index/Client/placeOrder",{address:this.address}).then(res => {
                         console.log(res.body);
                         //跳转页面。。。。。。
+                        window.location.href="myorder.html";
                     },response => {
                         console.log("error");
+                        alert("失败");
                     })
                 }
             }

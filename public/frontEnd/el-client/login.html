@@ -36,6 +36,9 @@
         <el-col :span="12" :offset="6">
             <el-button id="login" v-on:click="login" style="width:100%" type="primary">登陆</el-button>
         </el-col>
+        <el-col :span="12" :offset="6">
+            <el-button v-on:click="registered" style="width:100%" type="primary">注册</el-button>
+        </el-col>
     </el-row>
 </div>
 </body>
@@ -55,6 +58,9 @@
                 },function(res){
                     alert('密码错误');
                 });
+            },
+            registered:function () {
+                window.location.href="registered.html";
             }
         }
     });

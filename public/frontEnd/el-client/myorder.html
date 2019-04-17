@@ -73,7 +73,7 @@
                 confirm:function (index) {
                     this.$http.post('/index.php/index/Client/confirmOrder',{id:this.orders[index].id}).then(function(res){
                         console.log(res.body);
-                        this.orders=res.body.data;
+                        this.orders=res.body.data.reverse();
                     },function(res){
                         alert('密码错误');
                     });

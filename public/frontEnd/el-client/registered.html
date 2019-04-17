@@ -58,14 +58,15 @@
                     alert('密码不一致');
                     return;
                 }
-                this.$http.post('/index.php/index/Client/register',{tel:this.tel,password:this.pass1}).then(function(res){
+                Vue.http.post("/index.php/index/Client/register",{tel:this.tel,password:this.pass1}).then(res => {
                     console.log(res.body);
                     if (res.body.description==="OK"){
                         window.location.href="login.html";
                     }
-                },function(res){
-                    alert('密码错误');
-                });
+                },response => {
+                    console.log("error");
+                    alert('注册失败');
+                })
             },
         }
     });

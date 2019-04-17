@@ -152,7 +152,7 @@ class Admin
         Config::set("default_return_type","json");
         if (Session::get("admin")!="admin")
             return json(array("description"=>"error", "detail"=>"not login"),400);
-        $hotels = model('Hotel','logic')->AllHotelsAndOrderCount();
+        $hotels = model('Hotel','logic')->allHotelsAndOrderCount();
         return json(array("description"=>"OK","data"=>$hotels),200);
     }
 }

@@ -162,7 +162,7 @@ class Hotel extends Model
      * 全部店家 及店家订单数
      * @return array
      */
-    public function AllHotelsAndOrderCount(){
+    public function allHotelsAndOrderCount(){
         $newHotels = [];
         $hotels = \model('HotelUser','model')->selectAllHotels();
         foreach ($hotels as $hotel){
@@ -180,5 +180,14 @@ class Hotel extends Model
             ));
         }
         return $newHotels;
+    }
+
+    /**
+     * 根据店家tel 查询订单数
+     * @param $tel string 店家id
+     * @return mixed
+     */
+    public function orderCountByTel($tel){
+        return \model('ModelOrder','model')->countByHotel($tel);
     }
 }

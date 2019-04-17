@@ -55,6 +55,17 @@ class Store
             return json(array("description"=>"error", "detail"=>"not login"),400);
         }else{
             $data = model("Hotel","logic")->findHotelByTel($tel);
+            $int = $data->menu+$data->online+$data->examine;
+            $state='';
+            if ($int==3){
+                $state='已上线';
+            }else if($int==2){
+                $state='待上线';
+            }else if ($int==1){
+                $state='待上传菜单';
+            }else{
+                $state='待审核';
+            }
             $newData = array(
                 'name'=>$data->name,
                 'tel'=>$data->tel,
@@ -65,8 +76,8 @@ class Store
                 'menu'=>$data->menu,
                 'online'=>$data->online,
                 'portrait'=>$data->portrait,
-                'orderCount'=>'133',
-                'state'=>'上线',
+                'orderCount'=>model('Hotel','logic')->orderCountByTel($data->tel),
+                'state'=>$state,
             );
             return  json(array("description"=>"OK","data"=>$newData),200);
         }

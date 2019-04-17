@@ -247,7 +247,7 @@ window.onload=function () {
             shopkeeperOrders(index){
                 Vue.http.post("/index.php/index/Store/shopkeeperOrders",{id:this.orders[index].id}).then(res => {
                     console.log(res.body);
-                    this.orders = res.body.data;
+                    this.orders = res.body.data.reverse();
                 },response => {
                     console.log("error");
                 })
@@ -344,7 +344,7 @@ window.onload=function () {
      */
     Vue.http.get("/index.php/index/Store/oneself").then(res => {
         app.home=res.body.data
-        console.log(res.body.data );
+        console.log(res.body.data);
         console.log("页面刷新了")
     },response => {
         console.log("asd");
