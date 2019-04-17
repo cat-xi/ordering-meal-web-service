@@ -56,4 +56,12 @@ class LogicPerson extends Model
             return 1;
         return 0;
     }
+
+    /**
+     * 查询用户数量
+     * @return mixed
+     */
+    public function clientCount(){
+        return \model('ModelPerson','model')->countByClient();
+    }
 }

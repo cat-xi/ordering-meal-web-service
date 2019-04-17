@@ -64,4 +64,22 @@ class LogicOrder extends Model
     public function confirmOrder($id){
         return \model("ModelOrder",'model')->updateOrder(new Order($id,null,null,null,null,null,2));
     }
+
+    /**
+     * 全部订单信息 ['全部订单数','成功订单数','未完成订单数']
+     * @return array
+     */
+    public function orderMessage(){
+        $arr=[];
+        $orders = \model('ModelOrder','model')->selectAllOrders();
+        $successOrder = 0;//成功订单
+        foreach ($orders as $order){
+            if ($order->condition==2)
+                $successOrder++;
+        }
+        $count = count($orders);//全部订单
+        $failureOrder = $count-$successOrder;//未完成订单
+        $arr+=[$count,$successOrder,$failureOrder];
+        return $arr;
+    }
 }

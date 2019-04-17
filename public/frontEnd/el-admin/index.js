@@ -28,16 +28,16 @@ window.onload=function () {
                     </el-row>
                     <el-row :gutter="30">
                         <el-col :span="4" :offset="4">
-                            <el-progress type="circle" :percentage="100" status="text">订单数:{{home.order}}</el-progress>
-                        </el-col>
-                        <el-col :span="4">
                             <el-progress type="circle" :percentage="100" status="text">注册人数:{{home.user}}</el-progress>
                         </el-col>
                         <el-col :span="4">
-                            <el-progress type="circle" :percentage="home.successOrder/home.order*100" color="#67C23A" status="text">成交订单:{{home.successOrder}}</el-progress>
+                            <el-progress type="circle" :percentage="100" status="text">订单数:{{home.order}}</el-progress>
                         </el-col>
                         <el-col :span="4">
-                            <el-progress type="circle" :percentage="home.failureOrder/home.order*100" color="#FF6C6C" status="text">失败订单:{{home.failureOrder}}</el-progress>
+                            <el-progress type="circle" :percentage="home.successOrder/home.order*100" color="#67C23A" status="text">已完成订单:{{home.successOrder}}</el-progress>
+                        </el-col>
+                        <el-col :span="4">
+                            <el-progress type="circle" :percentage="home.failureOrder/home.order*100" color="#FF6C6C" status="text">未完成订单:{{home.failureOrder}}</el-progress>
                         </el-col>
                     </el-row>
                 </div>

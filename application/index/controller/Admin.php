@@ -17,6 +17,10 @@ use think\Session;
  */
 class Admin
 {
+    public function test(){
+        print_r(model('ModelOrder','model')->selectAllOrders());
+    }
+
     /**
      * 登陆
      * @return \think\response\Json
@@ -70,14 +74,15 @@ class Admin
              * successOrder:110成功订单
              * failureOrder:2失败订单
              */
+            $orderMessage = model('LogicOrder','logic')->orderMessage();
             $data=array(
                 'allHotel'=>$allHotel,
                 'examineHotel'=>$examineHotel,
                 'onlineHotel'=>$onlineHotel,
-                'order'=>120,
-                'user'=>1000,
-                'successOrder'=>110,
-                'failureOrder'=> 2
+                'order'=>$orderMessage[0],
+                'user'=>model('LogicPerson','logic')->clientCount(),
+                'successOrder'=>$orderMessage[1],
+                'failureOrder'=> $orderMessage[2]
             );
             return json(array("description"=>"OK","data"=>$data),200);
         }else{

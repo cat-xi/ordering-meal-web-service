@@ -43,4 +43,13 @@ class ModelPerson extends Model
         $per = $this->where("tel",$tel)->field('tel,password,admin')->find();
         return new Person($per['tel'],$per['password'],$per['admin']);
     }
+
+    /**
+     * 查询注册用户数量
+     * @return int|string
+     * @throws \think\Exception
+     */
+    public function countByClient(){
+        return $this->where('admin','=',false)->count();
+    }
 }
