@@ -58,7 +58,7 @@ window.onload=function () {
                 </el-row>
                 <div style="background-color: white;padding: 20px;">
                     <el-row>
-                        <el-steps :space="500" :active="1+home.examine+home.online" align-center finish-status="success">
+                        <el-steps :space="500" :active="1+home.examine+home.menu+home.online" align-center finish-status="success">
                             <el-step title="注册"></el-step>
                             <el-step title="审核"></el-step>
                             <el-step title="录入菜单"></el-step>
@@ -103,7 +103,7 @@ window.onload=function () {
                         <h1>上传菜单</h1>
                     </el-col>
                 </el-row>
-                <div style="background: white;height: 200px">
+                <div style="background: white">
                     <el-row v-if="menu.fun==0" :gutter="10">
                         <el-col :span="6">
                             <el-button style="width:100%" v-on:click="fun" type="primary">添加菜品</el-button>

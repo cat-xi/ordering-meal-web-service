@@ -30,6 +30,7 @@ class HotelUser extends Model
             'location'=>$hotel->location,
             'cuisine'=>$hotel->cuisine,
             'examine'=>$hotel->examine,
+            'menu'=>$hotel->menu,
             'online'=>$hotel->online,
             'portrait'=>$hotel->portrait
         ]);
@@ -53,9 +54,11 @@ class HotelUser extends Model
             $arr = $arr+array('location'=>$hotel->location);
         if ($hotel->cuisine!=null)
             $arr = $arr+array('cuisine'=>$hotel->cuisine);
-        if ($hotel->examine!=null)
+        if ($hotel->examine!==null)
             $arr = $arr+array('examine'=>$hotel->examine);
-        if ($hotel->online!=null)
+        if ($hotel->menu!==null)
+            $arr = $arr+array('menu'=>$hotel->menu);
+        if ($hotel->online!==null)
             $arr = $arr+array('online'=>$hotel->online);
         if ($hotel->portrait!=null)
             $arr = $arr+array('portrait'=>$hotel->portrait);
@@ -71,9 +74,9 @@ class HotelUser extends Model
      */
     public function selectAllHotels(){
         $hotels=[];
-        $list = $this->field('name,tel,password,location,cuisine,examine,online,portrait')->select();
+        $list = $this->field('name,tel,password,location,cuisine,examine,menu,online,portrait')->select();
         foreach ($list as $hotel){
-            array_push($hotels,new Hotel($hotel['name'],$hotel['tel'],$hotel['password'],$hotel['location'],$hotel['cuisine'],$hotel['examine'],$hotel['online'],$hotel['portrait']));
+            array_push($hotels,new Hotel($hotel['name'],$hotel['tel'],$hotel['password'],$hotel['location'],$hotel['cuisine'],$hotel['examine'],$hotel['menu'],$hotel['online'],$hotel['portrait']));
         }
         return $hotels;
     }
@@ -87,7 +90,7 @@ class HotelUser extends Model
      * @throws \think\exception\DbException
      */
     public function selectHotelByTel($tel){
-        $hotel = $this->where("tel",$tel)->field('name,tel,password,location,cuisine,examine,online,portrait')->find();
-        return new Hotel($hotel['name'],$hotel['tel'],$hotel['password'],$hotel['location'],$hotel['cuisine'],$hotel['examine'],$hotel['online'],$hotel['portrait']);
+        $hotel = $this->where("tel",$tel)->field('name,tel,password,location,cuisine,examine,menu,online,portrait')->find();
+        return new Hotel($hotel['name'],$hotel['tel'],$hotel['password'],$hotel['location'],$hotel['cuisine'],$hotel['examine'],$hotel['menu'],$hotel['online'],$hotel['portrait']);
     }
 }

@@ -49,34 +49,38 @@ window.onload=function () {
         },
         template:
             `<div>
-            <h1>待审核</h1>
-            <el-table :data="review"
-                height="250"
-                border
-                style="width: 100%">
-                <el-table-column
-                        prop="name"
-                        label="店家名称">
-                </el-table-column>
-                <el-table-column
-                        prop="tel"
-                        label="电话">
-                </el-table-column>
-                <el-table-column
-                        prop="location"
-                        label="位置">
-                </el-table-column>
-                <el-table-column
-                        prop="cuisine"
-                        label="菜系">
-                </el-table-column>
-                <el-table-column label="审核">
-                    <template slot-scope="scope">
-                        <el-button size="mini" type="danger" v-on:click="audit(scope.$index)">审核
-                        </el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
+                <el-row>
+                    <el-col :span="2">
+                        <h1>待审核</h1>
+                    </el-col>
+                </el-row>
+                <el-table :data="review"
+                    height="250"
+                    border
+                    style="width: 100%">
+                    <el-table-column
+                            prop="name"
+                            label="店家名称">
+                    </el-table-column>
+                    <el-table-column
+                            prop="tel"
+                            label="电话">
+                    </el-table-column>
+                    <el-table-column
+                            prop="location"
+                            label="位置">
+                    </el-table-column>
+                    <el-table-column
+                            prop="cuisine"
+                            label="菜系">
+                    </el-table-column>
+                    <el-table-column label="审核">
+                        <template slot-scope="scope">
+                            <el-button size="mini" type="danger" v-on:click="audit(scope.$index)">审核
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
             </div>`
         ,methods: {
             audit(index) {

@@ -25,6 +25,7 @@ class Hotel extends Model
             return -1;
         $hotel->online=false;//上线
         $hotel->examine=false;//审核
+        $hotel->menu=false;//菜单
         return \model('HotelUser','model')->insertHotel($hotel);
     }
 
@@ -95,18 +96,19 @@ class Hotel extends Model
      * @return mixed
      */
     public function auditHotel($tel){
-        return \model('HotelUser','model')->updateHotel(new \app\common\pojo\Hotel(null,$tel,null,null,null,true,null,null));
+        return \model('HotelUser','model')->updateHotel(new \app\common\pojo\Hotel(null,$tel,null,null,null,true,null,null,null));
     }
 
     /**
-     * 等待上线店家数据
+     * 等待上线店家数据(已经上传菜单)
      * @return array json 包含name,tel,location,cuisine,portrait,menu(array)
      */
     public function findNotOnline(){
         $newHotels = [];
         $hotels = \model('HotelUser','model')->selectAllHotels();
         foreach ($hotels as $hotel){
-            if ($hotel->examine==true&&$hotel->online==false){
+            //已经审核上传菜单 未上线
+            if ($hotel->examine==true&&$hotel->online==false&&$hotel->menu==true){
                 $hotel->portrait=$this->showUrl.$hotel->tel;
                 array_push($newHotels,array(
                     'name'=>$hotel->name,
@@ -127,7 +129,17 @@ class Hotel extends Model
      * @return mixed
      */
     public function onlineHotel($tel){
-        return \model('HotelUser','model')->updateHotel(new \app\common\pojo\Hotel(null,$tel,null,null,null,null,true,null));
+        return \model('HotelUser','model')->updateHotel(new \app\common\pojo\Hotel(null,$tel,null,null,null,null,null,true,null));
+    }
+
+    /**
+     * 上传菜单
+     * @param $tel string 店家tel
+     * @return mixed
+     */
+    public function uploadMenu($tel){
+        $hoee =  new \app\common\pojo\Hotel(null,$tel,null,null,null,null,true,0,null);
+        return \model('HotelUser','model')->updateHotel($hoee);
     }
 
     /**

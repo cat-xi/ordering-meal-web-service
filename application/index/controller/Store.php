@@ -26,7 +26,8 @@ class Store
     }
 
     /**
-     * 注册
+     * 店家注册
+     * @return \think\response\Json
      */
     public function register(){
         Config::set("default_return_type","json");
@@ -35,7 +36,7 @@ class Store
         }
         $image = file_get_contents(iconv('gb2312','utf-8',$_FILES["portrait"]['tmp_name']));
         $json = json_decode(input('menu'),true);
-        $hotel = new Hotel($json[0]['name'],$json[0]['tel'],$json[0]['password'],$json[0]['location'],$json[0]['cuisine'],null,null,$image);
+        $hotel = new Hotel($json[0]['name'],$json[0]['tel'],$json[0]['password'],$json[0]['location'],$json[0]['cuisine'],null,null,null,$image);
         $int = model("Hotel","logic")->registered($hotel);
         if ($int==1){
             return json(array("description"=>"OK"),200);
@@ -61,6 +62,7 @@ class Store
                 'location'=>$data->location,
                 'cuisine'=>$data->cuisine,
                 'examine'=>$data->examine,
+                'menu'=>$data->menu,
                 'online'=>$data->online,
                 'portrait'=>$data->portrait,
                 'orderCount'=>'133',
@@ -76,7 +78,7 @@ class Store
     public function login(){
         Config::set("default_return_type","json");
         $tel = input('tel');
-        $int = model("Hotel","logic")->login(new Hotel(null,$tel,input('password'),null,null,null,null,null));
+        $int = model("Hotel","logic")->login(new Hotel(null,$tel,input('password'),null,null,null,null,null,null));
         if ($int==1){
             Session::set("hotel","$tel");
             return json(array("description"=>"OK"),200);
@@ -130,9 +132,11 @@ class Store
             array_push($dishes,new Dish(null,$tel,$list["$i"]['name'],$list["$i"]['price'],file_get_contents(iconv('gb2312','utf-8',$_FILES["$i"]['tmp_name']))));
         }
         $int = model("LogicDish","logic")->addDishes($dishes);
-        if ($int==0){
+        if ($int==0){//判断提交菜单
             return json(array("description"=>"error", "detail"=>"data error"),400);
         }else{
+            //店家状态更改 menu为true online为false
+            model("Hotel","logic")->uploadMenu($tel);
             return json(array("description"=>"OK","data"=>model("LogicDish","logic")->findDishesByTel($tel)),200);
         }
     }
