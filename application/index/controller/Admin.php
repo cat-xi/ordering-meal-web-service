@@ -17,8 +17,11 @@ use think\Session;
  */
 class Admin
 {
+    /**
+     * 清除session
+     */
     public function test(){
-        print_r(model('ModelOrder','model')->selectAllOrders());
+        session(null);
     }
 
     /**
@@ -139,5 +142,17 @@ class Admin
             $hotels = model("Hotel","logic")->findNotOnline();
             return  json(array("description"=>"OK","data"=>$hotels),200);
         }
+    }
+
+    /**
+     * 全部店家 及店家订单数
+     * @return \think\response\Json
+     */
+    public function allHotel(){
+        Config::set("default_return_type","json");
+        if (Session::get("admin")!="admin")
+            return json(array("description"=>"error", "detail"=>"not login"),400);
+        $hotels = model('Hotel','logic')->AllHotelsAndOrderCount();
+        return json(array("description"=>"OK","data"=>$hotels),200);
     }
 }

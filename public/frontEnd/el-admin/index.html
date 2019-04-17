@@ -64,7 +64,7 @@
             <home-page v-if="view==1" v-bind:home="data"></home-page>
             <review-page v-if="view==2" v-bind:review="review"></review-page>
             <online-page v-if="view==3" v-bind:online="online"></online-page>
-            <store-page v-if="view==4"></store-page>
+            <store-page v-if="view==4" v-bind:hotels="hotels"></store-page>
         </el-main>
     </el-container>
 </div>

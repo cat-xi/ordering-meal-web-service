@@ -176,11 +176,53 @@ window.onload=function () {
     })
     Vue.component('store-page', {
         props: {
-            hotel: Object
+            hotels : Array
         },
         template:
-            `<div style="height: 100%;background-color: mediumpurple">
-                店家界面
+            `<div>
+                <el-row>
+                    <el-col :span="2">
+                        <h1>店家</h1>
+                    </el-col>
+                </el-row>
+                <!--"name": "麦当劳", "tel": "13804128601", "location": "虎石台", "cuisine": "快餐", "examine": 1, "menu": 1, "online": 1, "portrait": "/index.php/show/13804128601", "orderCount": 0 -->
+                <el-table :data="hotels"
+                    height="300"
+                    border
+                    style="width: 100%">
+                    <el-table-column label="头像">
+                        <template slot-scope="scope">
+                            <img style="height: 100px;width: 100px" v-bind:src="hotels[scope.$index].portrait">
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="name"
+                            label="店家名称">
+                    </el-table-column>
+                    <el-table-column
+                            prop="tel"
+                            label="电话">
+                    </el-table-column>
+                    <el-table-column
+                            prop="location"
+                            label="位置">
+                    </el-table-column>
+                    <el-table-column
+                            prop="cuisine"
+                            label="菜系">
+                    </el-table-column>
+                    <el-table-column label="状态">
+                        <template slot-scope="scope">
+                            <span v-if="(hotels[scope.$index].examine+hotels[scope.$index].menu+hotels[scope.$index].online)==3">已上线</span>
+                            <span v-else-if="(hotels[scope.$index].examine+hotels[scope.$index].menu+hotels[scope.$index].online)==2">未上线</span>
+                            <span v-else>未审核</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                            prop="orderCount"
+                            label="订单量">
+                    </el-table-column>
+                </el-table>
             </div>`
     })
     var app = new Vue({
@@ -199,8 +241,12 @@ window.onload=function () {
                 successOrder:100,
                 failureOrder:100,
             },
+            //待审核数据
             review:[],
-            online:[]
+            //待上线数据
+            online:[],
+            //店家数据
+            hotels:[]
         },
         methods:{
             /**
@@ -211,35 +257,45 @@ window.onload=function () {
             showPage(index, indexPath) {
                 switch (index) {
                     case '1':
-                        console.log("首页面");
+                        // console.log("首页面");
                         Vue.http.get("/index.php/index/Admin/homePage").then(res => {
-                            console.log(res.body.data );
-                            console.log("首页面数据刷新")
+                            // console.log(res.body.data );
+                            // console.log("首页面数据刷新")
                             this.data=res.body.data
                         },response => {
                             self.location='http://localhost:8888/frontEnd/el-admin/login.html';
                         })
                         break;
                     case '2':
-                        console.log("待审核页面");
+                        // console.log("待审核页面");
                         Vue.http.get("/index.php/index/Admin/reviewPage").then(res => {
-                            console.log(res.body.data );
-                            console.log("审核页面数据")
+                            // console.log(res.body.data );
+                            // console.log("审核页面数据")
                             this.review=res.body.data;
                         },response => {
                             // self.location='http://localhost:8888/frontEnd/el-admin/login.html';
                         })
                         break;
                     case '3':
-                        console.log("待上线页面");
+                        // console.log("待上线页面");
                         Vue.http.get("/index.php/index/Admin/onlinePage").then(res => {
-                            console.log(res.body.data );
-                            console.log("上线页面数据")
+                            // console.log(res.body.data );
+                            // console.log("上线页面数据")
                             this.online=res.body.data;
                         },response => {
                             // self.location='http://localhost:8888/frontEnd/el-admin/login.html';
                         })
                         break;
+                    case '4':
+                        console.log("店家页面");
+                        Vue.http.get("/index.php/index/Admin/allHotel").then(res => {
+                        // console.log(res.body.data );
+                        // console.log("上线页面数据")
+                        this.hotels=res.body.data;
+                    },response => {
+                        // self.location='http://localhost:8888/frontEnd/el-admin/login.html';
+                    })
+
                 }
                 this.view = index;
             }

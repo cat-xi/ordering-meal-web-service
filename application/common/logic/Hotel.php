@@ -157,4 +157,28 @@ class Hotel extends Model
         }
         return $newHotels;
     }
+
+    /**
+     * 全部店家 及店家订单数
+     * @return array
+     */
+    public function AllHotelsAndOrderCount(){
+        $newHotels = [];
+        $hotels = \model('HotelUser','model')->selectAllHotels();
+        foreach ($hotels as $hotel){
+            $hotel->portrait=$this->showUrl.$hotel->tel;
+            array_push($newHotels,array(
+                'name'=>$hotel->name,
+                'tel'=>$hotel->tel,
+                'location'=>$hotel->location,
+                'cuisine'=>$hotel->cuisine,
+                'examine'=>$hotel->examine,
+                'menu'=>$hotel->menu,
+                'online'=>$hotel->online,
+                'portrait'=>$hotel->portrait,
+                'orderCount'=>\model('ModelOrder','model')->countByHotel($hotel->tel),
+            ));
+        }
+        return $newHotels;
+    }
 }

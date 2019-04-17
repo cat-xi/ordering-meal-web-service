@@ -123,4 +123,14 @@ class ModelOrder extends Model
         }
         return $orders;
     }
+
+    /**
+     * 查询指定店家的订单数
+     * @param $hotel
+     * @return int|string
+     * @throws \think\Exception
+     */
+    public function countByHotel($hotel){
+        return $this->table('orders')->where('hotel',$hotel)->count();
+    }
 }
