@@ -43,26 +43,28 @@
 </div>
 </body>
 <script>
-    var app = new Vue({
-        el: '#app',
-        data:{
-            tel:'',
-            password:''
-        },methods:{
-            login:function(){
-                this.$http.post('/index.php/index/Client/login',{tel:this.tel,password:this.password}).then(function(res){
-                    console.log(res.body);
-                    if (res.body.description==="OK"){
-                        window.location.href="index.html";
-                    }
-                },function(res){
-                    alert('密码错误');
-                });
-            },
-            registered:function () {
-                window.location.href="registered.html";
+    window.onload=function () {
+        new Vue({
+            el: '#app',
+            data:{
+                tel:'',
+                password:''
+            },methods:{
+                login:function(){
+                    this.$http.post('/index.php/index/Client/login',{tel:this.tel,password:this.password}).then(function(res){
+                        console.log(res.body);
+                        if (res.body.description==="OK"){
+                            window.location.href="index.html";
+                        }
+                    },function(res){
+                        alert('密码错误');
+                    });
+                },
+                registered:function () {
+                    window.location.href="registered.html";
+                }
             }
-        }
-    });
+        });
+    }
 </script>
 </html>

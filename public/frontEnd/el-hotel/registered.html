@@ -64,37 +64,39 @@
 </div>
 </body>
 <script>
-    var app = new Vue({
-        el: '#app',
-        data: {
-            name:'',
-            tel:'',
-            password1:'',
-            password2:'',
-            location:'',
-            cuisine:''
-        },
-        methods:{
-            //主持
-            register:function(){
-                if (this.password1!==this.password2){
-                    alert("密码不一致");
-                    return;
+    window.onload=function () {
+        new Vue({
+            el: '#app',
+            data: {
+                name:'',
+                tel:'',
+                password1:'',
+                password2:'',
+                location:'',
+                cuisine:''
+            },
+            methods:{
+                //主持
+                register:function(){
+                    if (this.password1!==this.password2){
+                        alert("密码不一致");
+                        return;
+                    }
+                    //注册
+                    let formData = new FormData();
+                    var menu=[];
+                    formData.append("portrait",document.getElementById("portrait").files[0]);
+                    menu.push({name:this.name,tel:this.tel,password:this.password1,location:this.location,cuisine:this.cuisine})
+                    formData.append("menu",JSON.stringify(menu));
+                    this.$http.post('/index.php/index/Store/register',formData).then(function(res){
+                        // console.log(res.body);
+                        window.location.href="login.html";
+                    },function(res){
+                        alert('注册错误');
+                    });
                 }
-                //注册
-                let formData = new FormData();
-                var menu=[];
-                formData.append("portrait",document.getElementById("portrait").files[0]);
-                menu.push({name:this.name,tel:this.tel,password:this.password1,location:this.location,cuisine:this.cuisine})
-                formData.append("menu",JSON.stringify(menu));
-                this.$http.post('/index.php/index/Store/register',formData).then(function(res){
-                    // console.log(res.body);
-                    window.location.href="login.html";
-                },function(res){
-                    alert('注册错误');
-                });
             }
-        }
-    });
+        });
+    }
 </script>
 </html>

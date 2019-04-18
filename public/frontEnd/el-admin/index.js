@@ -165,10 +165,10 @@ window.onload=function () {
                 // /index.php/index/Admin/audit
                 Vue.http.post("/index.php/index/Admin/online",{tel:tel}).then(res => {
                     console.log(res.body.data );
-                    console.log("审核通过")
-                    this.online=res.body.data;
+                    console.log("上线通过")
+                    app.online=res.body.data;
                 },response => {
-                    alert('审核失败');
+                    alert('上线失败');
                     // self.location='http://localhost:8888/frontEnd/el-admin/login.html';
                 })
             }
