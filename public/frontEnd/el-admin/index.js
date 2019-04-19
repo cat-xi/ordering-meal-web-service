@@ -55,7 +55,7 @@ window.onload=function () {
                     </el-col>
                 </el-row>
                 <el-table :data="review"
-                    height="250"
+                    height="350"
                     border
                     style="width: 100%">
                     <el-table-column
@@ -185,9 +185,8 @@ window.onload=function () {
                         <h1>店家</h1>
                     </el-col>
                 </el-row>
-                <!--"name": "麦当劳", "tel": "13804128601", "location": "虎石台", "cuisine": "快餐", "examine": 1, "menu": 1, "online": 1, "portrait": "/index.php/show/13804128601", "orderCount": 0 -->
                 <el-table :data="hotels"
-                    height="300"
+                    height="500"
                     border
                     style="width: 100%">
                     <el-table-column label="头像">

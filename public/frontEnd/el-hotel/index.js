@@ -247,7 +247,7 @@ window.onload=function () {
             shopkeeperOrders(index){
                 Vue.http.post("/index.php/index/Store/shopkeeperOrders",{id:this.orders[index].id}).then(res => {
                     console.log(res.body);
-                    this.orders = res.body.data.reverse();
+                    app.orders = res.body.data.reverse();
                 },response => {
                     console.log("error");
                 })
