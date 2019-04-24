@@ -70,18 +70,30 @@ comment '订单菜单表';
 ##### 管理员模块
 + 登陆
 + 仪表盘(显示基础信息)
+![](https://github.com/quan930/ordering-meal-web-service/blob/master/showimage/5.png)
 + 审核
+![](https://github.com/quan930/ordering-meal-web-service/blob/master/showimage/2.png)
 + 上线
+![](https://github.com/quan930/ordering-meal-web-service/blob/master/showimage/3.png)
 + 显示全部店家信息
+![](https://github.com/quan930/ordering-meal-web-service/blob/master/showimage/4.png)
 ##### 店家模块
 + 登陆
 + 注册
 + 基础信息
+![](https://github.com/quan930/ordering-meal-web-service/blob/master/showimage/6.png)
 + 菜单处理
+![](https://github.com/quan930/ordering-meal-web-service/blob/master/showimage/1.png)
+![](https://github.com/quan930/ordering-meal-web-service/blob/master/showimage/7.png)
 + 订单处理
+![](https://github.com/quan930/ordering-meal-web-service/blob/master/showimage/8.png)
 ##### 用户模块
 + 登陆
 + 注册
 + 选择店家
+![](https://github.com/quan930/ordering-meal-web-service/blob/master/showimage/11.png)
 + 订餐
+![](https://github.com/quan930/ordering-meal-web-service/blob/master/showimage/12.png)
 + 订单处理
+![](https://github.com/quan930/ordering-meal-web-service/blob/master/showimage/13.png)
+![](https://github.com/quan930/ordering-meal-web-service/blob/master/showimage/9.png)
