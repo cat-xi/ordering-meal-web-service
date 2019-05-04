@@ -97,3 +97,8 @@ comment '订单菜单表';
 + 订单处理
 ![](https://github.com/quan930/ordering-meal-web-service/blob/master/showimage/13.png)
 ![](https://github.com/quan930/ordering-meal-web-service/blob/master/showimage/9.png)
+### URL
++ webRoot`public`
++ 管理员`http://localhost/frontEnd/el-admin`
++ 店家`http://localhost/frontEnd/el-hotel`
++ 客户端 `http://localhost:8888/frontEnd/el-client`
